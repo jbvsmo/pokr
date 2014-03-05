@@ -254,7 +254,11 @@ if __name__ == '__main__':
     box_reader.add_dialog_handler(DialogPusher().handle)
 
     debug = '--show' in sys.argv
-    proc = StreamProcessor(debug=debug)
+    try:
+        video_loc = sys.argv[sys.argv.index('-f') + 1]
+    except (ValueError, IndexError):
+        video_loc = None
+    proc = StreamProcessor(debug=debug, video_loc=video_loc)
     #proc.add_handler(handler_stdout)
     proc.add_handler(LogHandler('text', 'frames.log').handle)
     proc.add_handler(delta.StringDeltaCompressor('dithered', verify=True).handle)
