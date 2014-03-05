@@ -141,8 +141,12 @@ class SpriteIdentifier(object):
 
 
 class StreamProcessor(object):
-    def __init__(self, bufsize=120, ratelimit=True, frame_skip=0, default_handlers=True, debug=False, video_loc=None):
+    def __init__(self, bufsize=120, ratelimit=None, frame_skip=0, default_handlers=True, debug=False, video_loc=None):
         self.frame_queue = Queue.Queue(bufsize)
+        if ratelimit is None:
+            # Automatically enable ratelimit if not using the default stream
+            # from Twitch. Users may want to set it to True/False directly.
+            ratelimit = video_loc is None
         self.ratelimit = ratelimit
         self.frame_skip = frame_skip
         self.handlers = []
